@@ -17,6 +17,8 @@ class CarouselViewModel: ObservableObject {
         Card(cardColor: Color.blue, title: "title5")
     
     ]
+    
+    @Published var swipedCard = 0
 }
 
 
