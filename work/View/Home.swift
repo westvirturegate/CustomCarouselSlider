@@ -46,6 +46,7 @@ struct Home: View {
                             .frame(width: getCardWidth(index: index), height: getCardHeight(index: index))
                             .cornerRadius(25)
                             .offset(x: getCardOffset(index: index))
+                            .rotationEffect(.init(degrees: getCardRotation(index: index)))
                         
                         Spacer(minLength: 0)
                     }
@@ -82,16 +83,34 @@ struct Home: View {
         
         //model.cards[index].offset = 0
         
-        if -value.translation.width > width / 3 {
+        withAnimation{
             
-            model.cards[index].offset = -width
-        }
-        else{
-            
-            model.cards[index].offset = 0
+            if -value.translation.width > width / 3 {
+                
+                model.cards[index].offset = -width
+            }
+            else{
+                
+                model.cards[index].offset = 0
+            }
         }
         
     }
+    
+    
+    //MARK: get card rotation
+    
+    func getCardRotation(index: Int) -> Double {
+        
+        let boxWidth = Double(width / 3)
+        
+        let offset = Double(model.cards[index].offset)
+        
+        let angle : Double = 5
+        
+        return (offset / boxWidth) * angle
+    }
+    
     
     func getCardHeight(index: Int) -> CGFloat {
         
@@ -108,7 +127,7 @@ struct Home: View {
         
         let boxWidth = UIScreen.main.bounds.width - 60 - 60
         
-        let cardWidth = index <= 2 ? CGFloat(index) * 30 : 60
+        //let cardWidth = index <= 2 ? CGFloat(index) * 30 : 60
         
         return boxWidth //- cardWidth
     }
