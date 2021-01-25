@@ -17,6 +17,8 @@ struct Home: View {
     var body: some View {
         VStack{
             
+            
+            //MARK: title bar
             HStack{
                 
                 Button(action: {
@@ -36,7 +38,11 @@ struct Home: View {
                 Spacer()
             }
             .padding()
-        
+            //MARK: -title var
+            
+            
+            
+            //MARK: Cards
             ZStack{
                 
                 ForEach(model.cards.indices.reversed(), id: \.self){ index in
@@ -65,8 +71,40 @@ struct Home: View {
             }
             .padding(.top, 25)
             .padding(.horizontal, 30)
+            //MARK: -Cards
+            
+            
+            //MARK: reset button
+            Button(action: ResetViews, label: {
+                
+                Image(systemName: "arrow.left")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundColor(.blue)
+                    .padding()
+                    .background(Color.white)
+                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                    .shadow(radius: 3 )
+            })
+            .padding(.top,35)
+            //MARK: -reset button
+            
             
             Spacer()
+        }
+    }
+    
+    
+    //MARK: reset view
+    
+    func ResetViews() {
+        
+        for index in model.cards.indices{
+            
+            withAnimation(.spring()){
+                
+                model.cards[index].offset = 0
+                model.swipedCard = 0
+            }
         }
     }
     
@@ -88,13 +126,14 @@ struct Home: View {
             if -value.translation.width > width / 3 {
                 
                 model.cards[index].offset = -width
+                model.swipedCard += 1
             }
             else{
                 
                 model.cards[index].offset = 0
             }
+
         }
-        
     }
     
     
@@ -116,7 +155,7 @@ struct Home: View {
         
         let height : CGFloat = 400
         
-        let cardHeight = index <= 2 ? CGFloat(index) * 35 : 70
+        let cardHeight = index - model.swipedCard <= 2 ? CGFloat(index - model.swipedCard) * 35 : 70
         
         return height - cardHeight
     }
@@ -135,7 +174,7 @@ struct Home: View {
     
     func getCardOffset(index: Int) -> CGFloat {
         
-        return index <= 2 ? CGFloat(index) * 30 : 60
+        return index - model.swipedCard <= 2 ? CGFloat(index - model.swipedCard) * 30 : 60
         
     }
 }
