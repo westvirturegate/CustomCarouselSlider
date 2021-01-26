@@ -10,11 +10,11 @@ import SwiftUI
 class CarouselViewModel: ObservableObject {
     @Published var cards = [
     
-        Card(cardColor: Color.blue, title: "title1"),
-        Card(cardColor: Color.purple, title: "title2"),
-        Card(cardColor: Color.green, title: "title3"),
-        Card(cardColor: Color.yellow, title: "title4"),
-        Card(cardColor: Color.blue, title: "title5")
+        Card(cardColor: Color.blue, title: "My First Card Title"),
+        Card(cardColor: Color.purple, title: "My Second Card Title"),
+        Card(cardColor: Color.green, title: "My Third Card Title"),
+        Card(cardColor: Color.yellow, title: "My Fourth Card Title"),
+        Card(cardColor: Color.blue, title: "My Fifth Card Title")
     
     ]
     

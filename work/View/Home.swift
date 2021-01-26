@@ -48,9 +48,8 @@ struct Home: View {
                 ForEach(model.cards.indices.reversed(), id: \.self){ index in
                     
                     HStack {
-                        model.cards[index].cardColor
+                        CardView(card: model.cards[index])
                             .frame(width: getCardWidth(index: index), height: getCardHeight(index: index))
-                            .cornerRadius(25)
                             .offset(x: getCardOffset(index: index))
                             .rotationEffect(.init(degrees: getCardRotation(index: index)))
                         
