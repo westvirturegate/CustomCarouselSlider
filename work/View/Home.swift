@@ -13,82 +13,96 @@ var width = UIScreen.main.bounds.width
 struct Home: View {
     
     @EnvironmentObject var model : CarouselViewModel
+    @Namespace var animation
     
     var body: some View {
-        VStack{
+        ZStack {
             
+            //MARK: Home
             
-            //MARK: title bar
-            HStack{
+            VStack{
                 
-                Button(action: {
+                
+                //MARK: title bar
+                HStack{
                     
+                    Button(action: {
+                        
+                        
+                    }, label: {
+                        Image(systemName: "xmark")
+                            .font(.title2)
+                            .foregroundColor(.gray)
+                    })
                     
-                }, label: {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .foregroundColor(.gray)
+                    Text("Hello Swift")
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                        .padding(.leading)
+                    
+                    Spacer()
+                }
+                .padding()
+                //MARK: -title var
+                
+                
+                
+                //MARK: Cards
+                ZStack{
+                    
+                    ForEach(model.cards.indices.reversed(), id: \.self){ index in
+                        
+                        HStack {
+                            
+                            CardView(card: model.cards[index], animation: animation)
+                                .frame(width: getCardWidth(index: index), height: getCardHeight(index: index))
+                                .offset(x: getCardOffset(index: index))
+                                .rotationEffect(.init(degrees: getCardRotation(index: index)))
+                            
+                            Spacer(minLength: 0)
+                        }
+                        .frame(height: 400)
+                        .contentShape(Rectangle())
+                        .offset(x: model.cards[index].offset)
+                        .gesture(DragGesture(minimumDistance: 0)
+                                    .onChanged({ (value) in
+                                        onChanged(value: value, index: index)
+                                        
+                                    })
+                                    .onEnded({ (value) in
+                                        onEnd(value: value, index: index)
+                                    }))
+                    }
+                }
+                .padding(.top, 25)
+                .padding(.horizontal, 30)
+                //MARK: -Cards
+                
+                
+                //MARK: reset button
+                Button(action: ResetViews, label: {
+                    
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.blue)
+                        .padding()
+                        .background(Color.white)
+                        .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                        .shadow(radius: 3 )
                 })
+                .padding(.top,35)
+                //MARK: -reset button
                 
-                Text("Hello Swift")
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    .padding(.leading)
                 
                 Spacer()
             }
-            .padding()
-            //MARK: -title var
+            //MARK: -Home
             
+            //MARK: DetailView
             
-            
-            //MARK: Cards
-            ZStack{
-                
-                ForEach(model.cards.indices.reversed(), id: \.self){ index in
-                    
-                    HStack {
-                        CardView(card: model.cards[index])
-                            .frame(width: getCardWidth(index: index), height: getCardHeight(index: index))
-                            .offset(x: getCardOffset(index: index))
-                            .rotationEffect(.init(degrees: getCardRotation(index: index)))
-                        
-                        Spacer(minLength: 0)
-                    }
-                    .frame(height: 400)
-                    .contentShape(Rectangle())
-                    .offset(x: model.cards[index].offset)
-                    .gesture(DragGesture(minimumDistance: 0)
-                                .onChanged({ (value) in
-                                    onChanged(value: value, index: index)
-                                    
-                                })
-                                .onEnded({ (value) in
-                                    onEnd(value: value, index: index)
-                                }))
-                }
+            if model.showCard{
+                DetailView(animation: animation)
             }
-            .padding(.top, 25)
-            .padding(.horizontal, 30)
-            //MARK: -Cards
-            
-            
-            //MARK: reset button
-            Button(action: ResetViews, label: {
-                
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundColor(.blue)
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                    .shadow(radius: 3 )
-            })
-            .padding(.top,35)
-            //MARK: -reset button
-            
-            
-            Spacer()
         }
     }
     
@@ -179,7 +193,14 @@ struct Home: View {
 }
 
 struct Home_Previews: PreviewProvider {
+    
+    @Namespace static var animation
+    
     static var previews: some View {
-        ContentView()
+        Group {
+            
+            ContentView()
+            
+        }
     }
 }

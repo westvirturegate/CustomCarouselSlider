@@ -1,21 +1,20 @@
 //
-//  CardView.swift
+//  DetailView.swift
 //  work
 //
-//  Created by tokumoto on 2021/01/26.
+//  Created by tokumoto on 2021/01/27.
 //
 
 import SwiftUI
 
-struct CardView: View {
+struct DetailView: View {
     
-    @EnvironmentObject var model : CarouselViewModel
-    var card : Card
+    @EnvironmentObject var model: CarouselViewModel
     var animation : Namespace.ID
     
     var body: some View {
         
-        VStack{
+        VStack {
             
             Text("Tuesday 26 January")
                 .font(.caption)
@@ -23,53 +22,39 @@ struct CardView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 .padding(.top, 10)
-                .matchedGeometryEffect(id: "Date-\(card.id)", in: animation)
+                .matchedGeometryEffect(id: "Date-\(model.selectedCard.id)", in: animation)
             
             HStack {
                 
-                Text(card.title)
+                Text(model.selectedCard.title)
                     .font(.title)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
                     .padding()
-                    .matchedGeometryEffect(id: "Title-\(card.id)", in: animation)
+                    .matchedGeometryEffect(id: "Title-\(model.selectedCard.id)", in: animation)
                 
             }
             
             Spacer(minLength: 0)
             
-            
-            HStack{
-                
-                Spacer(minLength: 0)
-                
-                Text("Read More")
-                
-                Image(systemName: "arrow.right")
-                
-            }
-            .foregroundColor(Color.white.opacity(0.9))
-            .padding()
-            .padding()
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            card.cardColor
+            model.selectedCard.cardColor
                 .cornerRadius(25)
-                .matchedGeometryEffect(id: "bgColor-\(card.id)", in: animation)
+                .matchedGeometryEffect(id: "bgColor-\(model.selectedCard.id)", in: animation)
+                .ignoresSafeArea(.all, edges: .bottom)
+            
         )
         .onTapGesture {
             withAnimation(.spring()){
                 
-                model.selectedCard = card
                 model.showCard.toggle()
             }
         }
-        
     }
 }
 
-struct CardView_Previews: PreviewProvider {
+struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }

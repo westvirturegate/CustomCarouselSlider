@@ -19,6 +19,10 @@ class CarouselViewModel: ObservableObject {
     ]
     
     @Published var swipedCard = 0
+    
+    @Published var showCard = false
+    
+    @Published var selectedCard = Card(cardColor: .clear, title: "")
 }
 
 
